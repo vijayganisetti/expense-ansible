@@ -76,7 +76,7 @@
         name:
         - PyMySQL
         - cryptography
-          executable: pip3.9 ## pip3.3 is python version
+        executable: pip3.9 ## pip3.3 is python version
     # Check if password is already set
     - name: Connect to database and get version info
       community.mysql.mysql_info:
