@@ -76,8 +76,7 @@
         name:
           - PyMySQL
           - cryptography
-        state: present
-
+          executable: pip3.9 ## pip3.3 is python version
     # Check if password is already set
     - name: Connect to database and get version info
       community.mysql.mysql_info:
@@ -86,13 +85,64 @@
         login_host: db.vijayganisetti.online
         filter: version
         ignore_errors: yes
-      register: mysql_info
+      register: mysql_info ## using register command to store the output 
 
     - name: Print MySQL info
       ansible.builtin.debug:
-        msg: "{{ mysql_info }}"
+        msg: "{{ mysql_info }}" 
 
     # Set up root password for MySQL server
     - name: Set up root password
       ansible.builtin.command: "mysql_secure_installation --set-root-pass ExpenseApp@1 {{ mysql_root_password }}"
-      when: mysql_info.failed is true
+      when: mysql_info.failed is true ## boolean condition
+
+
+# ## this is the explanation of the script step by step
+# Configure MySQL on a server (db) including installation, service management, Python MySQL dependencies, and setting up the root password if necessary.
+
+# Playbook Explanation:
+# Initialization:
+
+# Objective: Configure MySQL server (db).
+# Prepare: Ask for the MySQL root password to use during configuration.
+# Tasks:
+
+# Task 1: Install MySQL server
+
+# Objective: Ensure MySQL server (mysql-server) is installed on the host.
+# Steps:
+# Use dnf (package manager for DNF-based systems like Fedora) to install mysql-server.
+# Ensure the package is in a present state (i.e., installed).
+# Task 2: Start and enable MySQL service
+
+# Objective: Ensure MySQL service (mysqld) is started and enabled to start on boot.
+# Steps:
+# Use Ansible's service module to manage the mysqld service.
+# Ensure the service is started and enabled.
+# Task 3: Install Python MySQL dependencies
+
+# Objective: Install necessary Python modules (PyMySQL and cryptography) for MySQL interaction.
+# Steps:
+# Use Ansible's package module to ensure PyMySQL and cryptography are installed.
+# Ensure both packages are in a present state.
+# Task 4: Connect to database and get version info
+
+# Objective: Check if MySQL is accessible and retrieve its version information.
+# Steps:
+# Use the mysql_info module from the community.mysql collection.
+# Attempt to login using root user credentials with a specified password (ExpenseApp@1).
+# Retrieve the MySQL server's version information.
+# Ignore errors gracefully (ignore_errors: yes) in case the connection fails.
+# Store the result in mysql_info for further inspection.
+# Task 5: Print MySQL info
+
+# Objective: Output the MySQL version information for verification.
+# Steps:
+# Use Ansible's debug module to print the mysql_info gathered in the previous task.
+# Task 6: Set up root password for MySQL server
+
+# Objective: Securely set up the root password for MySQL server if it's not already configured.
+# Steps:
+# Use Ansible's command module to execute mysql_secure_installation.
+# Pass the root password (ExpenseApp@1) and the user-inputted mysql_root_password.
+# Conditionally execute this task (when: mysql_info.failed is true) only if the previous attempt to retrieve MySQL info failed. ]
