@@ -74,8 +74,8 @@
     - name: Install Python MySQL dependencies
       ansible.builtin.package:
         name:
-          - PyMySQL
-          - cryptography
+        - PyMySQL
+        - cryptography
           executable: pip3.9 ## pip3.3 is python version
     # Check if password is already set
     - name: Connect to database and get version info
