@@ -1,30 +1,64 @@
-- name: configure mysql
-  hosts: Db
-  vars:
-  - login_host: db.vijayganisetti.online
-  become: yes
-  tasks:
-  - name: install mysql
-    ansible.builtin.dnf:
-      name: mysql-server
-      state: installed
+# - name: configure mysql
+#   hosts: Db
+#   vars:
+#   - login_host: db.vijayganisetti.online
+#   become: yes
+#   tasks:
+#   - name: install mysql
+#     ansible.builtin.dnf:
+#       name: mysql-server
+#       state: installed
 
-  - name: start and enable mysql
-    ansible.builtin.service:
-      name: mysqld
-      state: started
-      enabled: yes
+#   - name: start and enable mysql
+#     ansible.builtin.service:
+#       name: mysqld
+#       state: started
+#       enabled: yes
   
-  #check password is already set or not
-  - name: Get MySQL version with non-default credentials
-    community.mysql.mysql_info:
-    login_user: root
-    login_password: ExpenseApp@1
-    login_host: {{ login_host }}
-    filter: version
-    ignore_errors: yes
-    register: mysql_version
+#   #check password is already set or not
+#   - name: Get MySQL version with non-default credentials
+#     community.mysql.mysql_info:
+#     login_user: root
+#     login_password: ExpenseApp@1
+#     login_host: {{ login_host }}
+#     filter: version
+#     ignore_errors: yes
+#     register: mysql_version
 
-  - name: print the output
-    ansible.builtin.debug:
-      msg: "the output is {{mysql_version}}"
+#   - name: print the output
+#     ansible.builtin.debug:
+#       msg: "the output is {{mysql_version}}"
+
+---
+- name: Configure MySQL
+  hosts: Db
+  become: yes
+  vars:
+    login_host: db.vijayganisetti.online
+    mysql_root_password: ExpenseApp@1
+
+  tasks:
+    - name: Install MySQL Server
+      ansible.builtin.dnf:
+        name: mysql-server
+        state: installed
+
+    - name: Start and enable MySQL service
+      ansible.builtin.service:
+        name: mysqld
+        state: started
+        enabled: yes
+
+    # Check if password is already set or not
+    - name: Get MySQL version with non-default credentials
+      community.mysql.mysql_info:
+        login_user: root
+        login_password: "{{ mysql_root_password }}"
+        login_host: "{{ login_host }}"
+        filter: version
+      ignore_errors: yes
+      register: mysql_version
+
+    - name: Print the output
+      ansible.builtin.debug:
+        msg: "The output is {{ mysql_version }}"
