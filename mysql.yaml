@@ -1,81 +1,30 @@
-# - name: configure mysql
-#   hosts: Db
-#   vars:
-#   - login_host: db.vijayganisetti.online
-#   become: yes
-#   tasks:
-#   - name: install mysql
-#     ansible.builtin.dnf:
-#       name: mysql-server
-#       state: installed
-
-#   - name: start and enable mysql
-#     ansible.builtin.service:
-#       name: mysqld
-#       state: started
-#       enabled: yes
-  
-#   #check password is already set or not
-#   - name: Get MySQL version with non-default credentials
-#     community.mysql.mysql_info:
-#     login_user: root
-#     login_password: ExpenseApp@1
-#     login_host: {{ login_host }}
-#     filter: version
-#     ignore_errors: yes
-#     register: mysql_version
-
-#   - name: print the output
-#     ansible.builtin.debug:
-#       msg: "the output is {{mysql_version.stdout}}"
-
-
----
-- name: Install and configure MySQL Server 8.0.x
+- name: configure mysql
   hosts: Db
-  become: yes
-
   vars:
-    mysql_root_password: "ExpenseApp@1"  # Set your desired root password here
-
+  - login_host: db.vijayganisetti.online
+  become: yes
   tasks:
-    - name: Install MySQL Server
-      dnf:
-        name: mysql-server
-        state: present
+  - name: install mysql
+    ansible.builtin.dnf:
+      name: mysql-server
+      state: installed
 
-    - name: Enable MySQL service
-      systemd:
-        name: mysqld
-        enabled: yes
+  - name: start and enable mysql
+    ansible.builtin.service:
+      name: mysqld
+      state: started
+      enabled: yes
+  
+  #check password is already set or not
+  - name: Get MySQL version with non-default credentials
+    community.mysql.mysql_info:
+    login_user: root
+    login_password: ExpenseApp@1
+    login_host: {{ login_host }}
+    filter: version
+    ignore_errors: yes
+    register: mysql_version
 
-    - name: Start MySQL service
-      systemd:
-        name: mysqld
-        state: started
-
-    - name: Secure MySQL installation and set root password
-      expect:
-        command: mysql_secure_installation
-        responses:
-          "Press y|Y for Yes, any other key for No:": "y"
-          "Please enter 0 = LOW, 1 = MEDIUM and 2 = STRONG:": "2"
-          "New password:": "{{ mysql_root_password }}"
-          "Re-enter new password:": "{{ mysql_root_password }}"
-          "Do you wish to continue with the password provided?:": "y"
-          "Remove anonymous users?:": "y"
-          "Disallow root login remotely?:": "y"
-          "Remove test database and access to it?:": "y"
-          "Reload privilege tables now?:": "y"
-      no_log: true
-
-    - name: Verify MySQL is running
-      systemd:
-        name: mysqld
-        state: started
-      register: mysql_service_status
-
-    - name: Print MySQL service status
-      debug:
-        var: mysql_service_status
-
+  - name: print the output
+    ansible.builtin.debug:
+      msg: "the output is {{mysql_version}}"
