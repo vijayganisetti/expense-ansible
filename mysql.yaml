@@ -1,11 +1,16 @@
 - name: configuaring mysql
 hosts: db
 become: yes
+vars_prompt:
+  - name: mysql_root_password
+    prompt: "enter root password"
+    private: no
 tasks:
   - name: install mysql
     ansible.builtin.dnf:
     name: mysql-server
     state: present
+
 ##google it -- ansible start service and enable
   - name: start mysqld
     ansible.builtin.service:
@@ -13,9 +18,17 @@ tasks:
     state: started
     enable: yes
 
+  ##here we install python mysql depencency
+  - name: install python mysql dependency
+    ansible.builtin.package:
+    name:
+    - PYMySQL
+    - cryptography
+    executable: pip3.3 ## pip3.3 is python version
+
   ## check password is already set-up ot not
   ##ggogle-- ansible my sql module 
-  - name: set mysql root password
+  - name: connect to datbase
     community.my.sql.mysql_info:
     login_user: root
     login_password: ExpenseApp@1
@@ -26,4 +39,11 @@ tasks:
 
   - name: print output
     ansible.builtin.debug:
-    msg: "{{ mysql_info}}"
+    msg: "{{ mysql_info}}" 
+    ##up to this executed got error python : now we are connecting to mysql from ansible which is developed in python
+    ##PyMySQL is a dependency for python to connect mysql servers -- pip install PyMySQL
+
+    ##set up root password for mysql server
+  - name: set up root password
+    ansible.builtin.command: "mysql_secure_installation --set-root-pass ExpenseApp@1 {{ mysql_root_password }}"
+    when: mysql_info.false is true
