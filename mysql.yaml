@@ -77,6 +77,7 @@
         - PyMySQL
         - cryptography
         state: present
+
     # Check if password is already set
     - name: Connect to database and get version info
       community.mysql.mysql_info:
