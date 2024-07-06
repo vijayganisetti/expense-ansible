@@ -1,7 +1,7 @@
 - name: configuaring mysql
-hosts: db
-become: yes
-vars_prompt:
+  hosts: db
+  become: yes
+  vars_prompt:
   - name: mysql_root_password
     prompt: "enter root password"
     private: no
