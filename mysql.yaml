@@ -81,12 +81,12 @@
     # Check if password is already set
     - name: Connect to database and get version info
       community.mysql.mysql_info:
-      login_user: root
-      login_password: ExpenseApp@1
-      login_host: db.vijayganisetti.online
-      filter: version
+       login_user: root
+       login_password: ExpenseApp@1
+       login_host: db.vijayganisetti.online
+       filter: version
       ignore_errors: yes
-      register: mysql_info ## using register command to store the output 
+       register: mysql_info ## using register command to store the output 
 
     - name: Print MySQL info
       ansible.builtin.debug:
