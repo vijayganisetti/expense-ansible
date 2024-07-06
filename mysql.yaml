@@ -1,7 +1,7 @@
 - name: configure mysql
   hosts: Db
   vars:
-  login_host: db.vijayganisetti.online
+  - login_host: db.vijayganisetti.online
   become: yes
   tasks:
   - name: install mysql
