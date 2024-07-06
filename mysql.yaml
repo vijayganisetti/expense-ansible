@@ -31,7 +31,7 @@
 
 ---
 - name: Configure MySQL
-  hosts: Db
+  hosts: localhost
   become: yes
   vars:
     login_host: db.vijayganisetti.online
