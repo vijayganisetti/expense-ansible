@@ -1,49 +1,98 @@
-- name: configuaring mysql
+# - name: configuaring mysql
+#   hosts: db
+#   become: yes
+#   vars_prompt:
+#   - name: mysql_root_password
+#     prompt: "enter root password"
+#     private: no
+#   tasks:
+#   - name: install mysql
+#     ansible.builtin.dnf:
+#     name: mysql-server
+#     state: present
+
+# ##google it -- ansible start service and enable
+#   - name: start mysqld
+#     ansible.builtin.service:
+#     name: mysqld
+#     state: started
+#     enable: yes
+
+#   ##here we install python mysql depencency
+#   - name: install python mysql dependency
+#     ansible.builtin.package:
+#     name:
+#     - PYMySQL
+#     - cryptography
+#     executable: pip3.3 ## pip3.3 is python version
+
+#   ## check password is already set-up ot not
+#   ##ggogle-- ansible my sql module 
+#   - name: connect to datbase
+#     community.my.sql.mysql_info:
+#     login_user: root
+#     login_password: ExpenseApp@1
+#     login_host: db.vijayganisetti.online
+#     filter: version
+#     ignore_errors: yes
+#     register: mysql_info
+
+#   - name: print output
+#     ansible.builtin.debug:
+#     msg: "{{ mysql_info}}" 
+#     ##up to this executed got error python : now we are connecting to mysql from ansible which is developed in python
+#     ##PyMySQL is a dependency for python to connect mysql servers -- pip install PyMySQL
+
+#     ##set up root password for mysql server
+#   - name: set up root password
+#     ansible.builtin.command: "mysql_secure_installation --set-root-pass ExpenseApp@1 {{ mysql_root_password }}"
+#     when: mysql_info.false is true
+
+
+---
+- name: Configuring MySQL
   hosts: db
   become: yes
   vars_prompt:
-  - name: mysql_root_password
-    prompt: "enter root password"
-    private: no
+    - name: mysql_root_password
+      prompt: "Enter root password"
+      private: no
+  
   tasks:
-  - name: install mysql
-    ansible.builtin.dnf:
-    name: mysql-server
-    state: present
+    - name: Install MySQL server
+      ansible.builtin.dnf:
+        name: mysql-server
+        state: present
 
-##google it -- ansible start service and enable
-  - name: start mysqld
-    ansible.builtin.service:
-    name: mysqld
-    state: started
-    enable: yes
+    - name: Start and enable MySQL service
+      ansible.builtin.service:
+        name: mysqld
+        state: started
+        enabled: yes
 
-  ##here we install python mysql depencency
-  - name: install python mysql dependency
-    ansible.builtin.package:
-    name:
-    - PYMySQL
-    - cryptography
-    executable: pip3.3 ## pip3.3 is python version
+    # Install Python MySQL dependency
+    - name: Install Python MySQL dependencies
+      ansible.builtin.package:
+        name:
+          - PyMySQL
+          - cryptography
+        state: present
 
-  ## check password is already set-up ot not
-  ##ggogle-- ansible my sql module 
-  - name: connect to datbase
-    community.my.sql.mysql_info:
-    login_user: root
-    login_password: ExpenseApp@1
-    login_host: db.vijayganisetti.online
-    filter: version
-    ignore_errors: yes
-    register: mysql_info
+    # Check if password is already set
+    - name: Connect to database and get version info
+      community.mysql.mysql_info:
+        login_user: root
+        login_password: ExpenseApp@1
+        login_host: db.vijayganisetti.online
+        filter: version
+        ignore_errors: yes
+      register: mysql_info
 
-  - name: print output
-    ansible.builtin.debug:
-    msg: "{{ mysql_info}}" 
-    ##up to this executed got error python : now we are connecting to mysql from ansible which is developed in python
-    ##PyMySQL is a dependency for python to connect mysql servers -- pip install PyMySQL
+    - name: Print MySQL info
+      ansible.builtin.debug:
+        msg: "{{ mysql_info }}"
 
-    ##set up root password for mysql server
-  - name: set up root password
-    ansible.builtin.command: "mysql_secure_installation --set-root-pass ExpenseApp@1 {{ mysql_root_password }}"
-    when: mysql_info.false is true
+    # Set up root password for MySQL server
+    - name: Set up root password
+      ansible.builtin.command: "mysql_secure_installation --set-root-pass ExpenseApp@1 {{ mysql_root_password }}"
+      when: mysql_info.failed is true
