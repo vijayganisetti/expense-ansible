@@ -76,7 +76,7 @@
         name:
           - PyMySQL
           - cryptography
-        state: present
+        executable: pip3.3
 
     # Check if password is already set
     - name: Connect to database and get version info
@@ -95,7 +95,7 @@
     # Set up root password for MySQL server
     - name: Set up root password
       ansible.builtin.command: "mysql_secure_installation --set-root-pass ExpenseApp@1 {{ mysql_root_password }}"
-      when: mysql_info.failed is true ## condition using boolean operator 
+      when: mysql_info.failed is true ## condition boolean operator 
 
 
 # ## this is the explanation of the script step by step
