@@ -72,7 +72,7 @@
 
     # Install Python MySQL dependency
     - name: Install Python MySQL dependencies
-      ansible.builtin.package:
+      ansible.builtin.pip3:
         name:
         - PyMySQL
         - cryptography
