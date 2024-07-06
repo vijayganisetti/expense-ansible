@@ -86,7 +86,7 @@
        login_host: db.vijayganisetti.online
        filter: version
       ignore_errors: yes
-       register: mysql_info ## using register command to store the output 
+      register: mysql_info ## using register command to store the output 
 
     - name: Print MySQL info
       ansible.builtin.debug:
