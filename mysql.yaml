@@ -70,13 +70,13 @@
         state: started
         enabled: yes
 
+    # Install Python MySQL dependency
     - name: Install Python MySQL dependencies
       ansible.builtin.pip:
         name:
-        - PyMySQL
-        - cryptography
-      executable: pip3.9  # Replace with appropriate pip executable version if needed (e.g., pip3.11 for Python 3.11)
-
+          - PyMySQL
+          - cryptography
+        state: present
 
     # Check if password is already set
     - name: Connect to database and get version info
@@ -95,7 +95,7 @@
     # Set up root password for MySQL server
     - name: Set up root password
       ansible.builtin.command: "mysql_secure_installation --set-root-pass ExpenseApp@1 {{ mysql_root_password }}"
-      when: mysql_info.failed is true ## boolean condition
+      when: mysql_info.failed is true ## condition using boolean operator 
 
 
 # ## this is the explanation of the script step by step
