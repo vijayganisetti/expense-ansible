@@ -1,5 +1,13 @@
 - name: Configuring the backend
   hosts: backend
+  vars_prompt: 
+  - name: login_password
+    prompt: enter the password
+    private: no
+  vars:
+  host_name: backend.vijayganisetti.online
+
+  
   become: yes
   tasks:
   - name: disable Node.
@@ -33,3 +41,23 @@
       src: /tmp/backend.zip
       dest: /app
       remote_src: yes
+
+  - name: install npm dependencies
+    ansible.builtin.dnf: npm install
+     args: ## npm should install in /app but in ansible we dont exact /current location that why we use args --search google ansible args 
+    chdir: /app 
+
+  - name: copy backend service
+    ansible.builtin.copy:
+    src: backend.service
+    dest: etc/systemd/system/backend.service
+
+  - name: sent data to mysql
+    community.mysql.mysql_db:
+    login_user: root
+    login_password: "{{login_password}}"
+    login_host: "{{host_name}}"
+    target: /app/schema/backend.sql
+    state: dump
+
+
