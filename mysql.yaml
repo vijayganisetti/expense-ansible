@@ -31,7 +31,7 @@
       community.mysql.mysql_info:
        login_user: root
        login_password: ExpenseApp@1
-       login_host: db.vijayganisetti.online
+       login_host: 172.31.60.253
        filter: version
       ignore_errors: yes
       register: mysql_info ## using register command to store the output 
