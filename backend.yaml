@@ -5,7 +5,10 @@
   hosts: backend
   vars:
     login_host: db.vijayganisetti.online
-    set_login_password: ExpenseApp@1
+  vars_prompt:
+  - name: set_login_password
+    prompt: please set the root password
+    private: no
   tasks:
   - name: disable default nodejs
     ansible.builtin.command: dnf module disable nodejs -y
