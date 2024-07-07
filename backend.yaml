@@ -43,7 +43,7 @@
       remote_src: yes
 
   - name: install npm dependencies
-    ansible.builtin.dnf: npm install 
+    ansible.builtin.command: npm install 
      args: 
       chdir: /app 
 
