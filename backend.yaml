@@ -92,7 +92,7 @@
       state: installed
   - name: install sql
     ansible.builtin.dnf:
-      name: mysqld
+      name: mysql
       state: installed
 
   - name: create expense user
