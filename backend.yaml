@@ -2,19 +2,19 @@
   hosts: backend
   become: yes
   tasks:
-    - name: disable Node.js
-      ansible.builtin.dnf: dnf module disable nodejs -y
+  - name: disable Node.js
+    ansible.builtin.dnf: dnf module disable nodejs -y
         
 
-    - name: Enable Node.js 20 module
-      ansible.builtin.command:
-        cmd: dnf module enable nodejs:20 -y
+  - name: Enable Node.js 20 module
+    ansible.builtin.command:
+      cmd: dnf module enable nodejs:20 -y
 
-    - name: Install Node.js
-      ansible.builtin.dnf:
-        name: nodejs
-        state: present
+  - name: Install Node.js
+    ansible.builtin.dnf:
+      name: nodejs
+      state: present
 
-    - name: Create expense user
-      ansible.builtin.user:
-        name: expense
+  - name: Create expense user
+    ansible.builtin.user:
+      name: expense
