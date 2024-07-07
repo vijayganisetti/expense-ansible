@@ -17,16 +17,14 @@
   - name: Enable Node js 20 module
     ansible.builtin.command: dnf module enable nodejs:20 -y
 
-  - name: Install Node.js
-    ansible.builtin.dnf:
-      name: - "{{ item }}"
+  - name: install nodejs
+    ansible.builtin.dnf: # only works for Redhat family
+      name: "{{ item }}"
       state: installed
     loop:
     - nodejs
-    - mysql  
+    - mysql
     
-      
-
   - name: Create expense user
     ansible.builtin.user:
       name: expense
