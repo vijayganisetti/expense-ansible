@@ -45,12 +45,19 @@
   - name: install npm dependencies
     ansible.builtin.dnf: npm install
      args: ## npm should install in /app but in ansible we dont exact /current location that why we use args --search google ansible args 
-    chdir: /app 
+       chdir: /app 
 
   - name: copy backend service
     ansible.builtin.copy:
     src: backend.service
     dest: etc/systemd/system/backend.service
+
+  - name: install python mysql dependencies
+    ansible.builtin.pip: 
+      name:
+      - PyMySQL # to connect MySQL DB from Ansible
+      - cryptography
+      executable: pip3.9 # pip3.11 if python version is 3.11
 
   - name: sent data to mysql
     community.mysql.mysql_db:
@@ -59,5 +66,6 @@
     login_host: "{{host_name}}"
     target: /app/schema/backend.sql
     state: dump
+    name: all
 
 
