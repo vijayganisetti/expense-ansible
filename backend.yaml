@@ -1,5 +1,6 @@
 - name: Configuring the backend
   hosts: backend
+  become: yes
   vars_prompt: 
   - name: login_password
     prompt: enter the password
@@ -7,8 +8,6 @@
   vars:
   host_name: backend.vijayganisetti.online
 
-  
-  become: yes
   tasks:
   - name: disable Node.
     ansible.builtin.command: dnf module disable nodejs -y
