@@ -3,12 +3,6 @@
 - name: configure backend server
   become: yes
   hosts: backend
-  vars:
-    login_host: db.vijayganisetti.online
-  vars_prompt:
-  - name: set_login_password
-    prompt: please set the root password
-    private: no
   tasks:
   - name: disable default nodejs
     ansible.builtin.command: dnf module disable nodejs -y
@@ -65,8 +59,8 @@
   - name: import the data in to sql
     community.mysql.mysql_db:
       login_user: root
-      login_password: "{{set_login_password}}"
-      login_host: "{{login_host}}"
+      login_password: ExpenseApp@1
+      login_host: db.vijayganisetti.online
       state: import
       name: all
       target: /app/schema/backend.sql
