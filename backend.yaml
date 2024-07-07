@@ -7,7 +7,7 @@
     prompt: enter the password
     private: no
   vars:
-  host: backend.vijayganisetti.online
+    host: backend.vijayganisetti.online
 
   tasks:
   - name: disable Node.
