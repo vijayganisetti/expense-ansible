@@ -47,10 +47,11 @@
     args:
       chdir: /app
 
+
   - name: copy backend service
     ansible.builtin.copy:
-    src: backend.service
-    dest: etc/systemd/system/backend.service
+      src: backend.service
+      dest: /etc/systemd/system/backend.service
 
   - name: install python mysql dependencies
     ansible.builtin.pip: 
