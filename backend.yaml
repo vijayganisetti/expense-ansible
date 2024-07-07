@@ -7,7 +7,7 @@
     prompt: enter the password
     private: no
   vars:
-  host_name: backend.vijayganisetti.online
+  host: backend.vijayganisetti.online
 
   tasks:
   - name: disable Node.
@@ -63,7 +63,7 @@
     community.mysql.mysql_db:
     login_user: root
     login_password: "{{login_password}}"
-    login_host: "{{host_name}}"
+    login_host: "{{host}}"
     target: /app/schema/backend.sql
     state: dump
     name: all
