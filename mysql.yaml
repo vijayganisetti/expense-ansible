@@ -1,50 +1,48 @@
-- name: Configuring MySQL
+- name: configure DB server
   hosts: db
   become: yes
+  vars:
+    login_host: db.vijayganisetti.online
   vars_prompt:
-    - name: mysql_root_password
-      prompt: "Enter root password"
-      private: no
-  
+  - name: mysql_root_password
+    prompt: please enter MySQL root password
+    private: no
   tasks:
-    - name: Install MySQL server
-      ansible.builtin.dnf:
-        name: mysql-server
-        state: present
+  - name: Install MySQL Server
+    ansible.builtin.dnf:
+      name: mysql-server
+      state: latest
 
-    - name: Start and enable MySQL service
-      ansible.builtin.service:
-        name: mysqld
-        state: started
-        enabled: yes
+  - name: Start and Enable MySQL server
+    ansible.builtin.service:
+      name: mysqld
+      state: started
+      enabled: yes
 
-    # # Install Python MySQL dependency
-    # - name: Install Python MySQL dependencies
-    #   ansible.builtin.pip:
-    #     name:
-    #       - PyMySQL
-    #       - cryptography
-    #     executable: pip3.9
+  - name: install python mysql dependencies
+    ansible.builtin.pip:
+      name:
+      - PyMySQL
+      - cryptography
+      executable: pip3.9 # pip3.11 if python version is 3.11
 
-    # Check if password is already set
-    # - name: Connect to database and get version info
-    #   community.mysql.mysql_info:
-    #    login_user: root
-    #    login_password: ExpenseApp@1
-    #    login_host: db.vijayganisetti.online
-    #    filter: version
-    #   ignore_errors: yes
-    #   register: mysql_info ## using register command to store the output 
+  # check password is already setup or not
+  - name: check DB connection
+    community.mysql.mysql_info:
+      login_user: root
+      login_password: "{{ mysql_root_password }}"
+      login_host: "{{ login_host }}"
+      filter: version
+    ignore_errors: yes
+    register: mysql_connection_output
 
-    # - name: Print MySQL info
-    #   ansible.builtin.debug:
-    #     msg: "{{ mysql_info }}" 
+  - name: print output
+    ansible.builtin.debug:
+      msg: "Output: {{mysql_connection_output}} "
 
-    # # Set up root password for MySQL server
-    # - name: Set up root password
-    #   ansible.builtin.command: "mysql_secure_installation --set-root-pass ExpenseApp@1 {{ mysql_root_password }}"
-    #   when: mysql_info.failed is true ## condition boolean operator ##here we are calling varable but not declaring {{}} . in condition we must use {{ }}
-
+  - name: setup root password
+    ansible.builtin.command: "mysql_secure_installation --set-root-pass {{ mysql_root_password }}"
+    when: mysql_connection_output.failed is true # don't give {{ }} in when condition
 
 # ## this is the explanation of the script step by step
 # Configure MySQL on a server (db) including installation, service management, Python MySQL dependencies, and setting up the root password if necessary.
