@@ -43,9 +43,9 @@
       remote_src: yes
 
   - name: install npm dependencies
-    ansible.builtin.dnf: npm install # npm should install in /app but in ansible we dont exact /current location that why we use args --search google ansible args 
+    ansible.builtin.dnf: npm install 
      args: 
-       chdir: /app 
+      chdir: /app 
 
   - name: copy backend service
     ansible.builtin.copy:
