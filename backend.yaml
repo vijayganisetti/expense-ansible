@@ -132,5 +132,13 @@
       - cryptography
       executable: pip3.9 # pip3.11 if python version is 3.11
 
- 
+  - name: import the data in to sql
+    community.mysql.mysql_db:
+    login_user: root
+    login_password: ExpenseApp@1
+    login_host: db.vijayganisetti.online
+    state: import
+    name: all
+    target: /app/schema/backend.sql
+    
   
