@@ -132,33 +132,5 @@
       - cryptography
       executable: pip3.9 # pip3.11 if python version is 3.11
 
-  - name: import data into mysql
-    community.mysql.mysql_db:
-      login_user: root
-      login_password: "{{ login_password }}"
-      login_host: "{{ login_host }}"
-      target: app/schema/backend.sql
-      state: import
-      name: all
-
-  - name: daemon reload
-    ansible.builtin.systemd_service:
-      daemon_reload: true
-
-  - name: start and enable backend service
-    ansible.builtin.service:
-      name: backend
-      state: started
-      enabled: yes
-
-  - name: daemon reload
-    ansible.builtin.systemd_service:
-      daemon_reload: true
-
-  - name: start and enable backend service
-    ansible.builtin.service:
-      name: backend
-      state: started
-      enabled: yes
-      
+ 
   
