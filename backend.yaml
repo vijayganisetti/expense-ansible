@@ -77,7 +77,7 @@
   become: yes
   hosts: backend
   vars:
-    login_host: backend.vijayganisetti.online
+    login_host: db.vijayganisetti.online
     set_login_password: ExpenseApp@1
   tasks:
   - name: disable default nodejs
@@ -135,8 +135,8 @@
   - name: import the data in to sql
     community.mysql.mysql_db:
       login_user: root
-      login_password: "{{ set_login_password }}"
-      login_host: "{{ login_host }}"
+      login_password: "{{set_login_password}}"
+      login_host: "{{login_host}}"
       state: import
       name: all
       target: /app/schema/backend.sql
